@@ -4,6 +4,7 @@ import com.alleria.Action;
 import com.alleria.AppRequest;
 import com.alleria.AppResponse;
 import com.alleria.util.HttpUtil;
+import com.alleria.util.JacksonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +42,12 @@ public class Pay extends Action {
         AppRequest appRequest = encrypt(request);
         AppResponse response = HttpUtil.post(QUERY, appRequest);
         return decrypt(response, PayOrder.class);
+    }
+
+    public PayOrder payNotify(String json) {
+        AppResponse response = AppResponse.from(json);
+        Event event = decryptBasic(response, Event.class);
+        return JacksonUtil.toObject(event.getData(), PayOrder.class);
     }
 
 }

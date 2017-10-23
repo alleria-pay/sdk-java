@@ -3,6 +3,7 @@ package com.alleria;
 import com.alleria.pay.ConfirmRequest;
 import com.alleria.pay.PayOrder;
 import com.alleria.pay.PayRequest;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +25,7 @@ public class SdkTest {
             .setPrivateKeyStr(agencyPrivateKey)
             .setPublicKeyStr(platformPublicKey);
 
-    @org.junit.Test
+    @Test
     public void createPay() throws Exception {
         PayRequest request = new PayRequest();
         request.setMerchantId(10025153461L);
@@ -33,7 +34,7 @@ public class SdkTest {
         request.setSubject("测试订单");
         request.setDesc("测试描述");
         request.setAmount(1060);
-        request.setClientIp("127.0.0.1");
+        request.setClientInfo(new PayRequest.ClientInfo("user1", "127.0.0.1"));
         PayRequest.ChannelExtra extra = new PayRequest.ChannelExtra("张三", "18671040587", "130201199006010429", "6225092387218372");
         extra.setExpirationDate("0422");
         extra.setCvn2("159");
@@ -43,7 +44,7 @@ public class SdkTest {
 
     }
 
-    @org.junit.Test
+    @Test
     public void confirmPay() throws Exception {
         ConfirmRequest request = new ConfirmRequest();
         request.setOrderNo(348318168287727962L);
@@ -55,7 +56,7 @@ public class SdkTest {
 
     }
 
-    @org.junit.Test
+    @Test
     public void queryOrder() throws Exception {
         ConfirmRequest request = new ConfirmRequest();
         request.setOrderNo(348318168287727962L);
@@ -63,6 +64,13 @@ public class SdkTest {
         PayOrder order = sdk.pay().query(request);
         LOGGER.info(String.valueOf(order.getOrderNo()));
 
+    }
+
+    @Test
+    public void payNotify() {
+        String json = "some notify";
+        PayOrder order = sdk.pay().payNotify(json);
+        LOGGER.info(order.toString());
     }
 
 }

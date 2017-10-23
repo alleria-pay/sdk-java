@@ -1,6 +1,7 @@
 package com.alleria.pay;
 
 import com.alleria.AppResult;
+import com.alleria.util.JacksonUtil;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,5 +105,10 @@ public class PayOrder extends AppResult {
 
     public void setMetaData(Map<String, String> metaData) {
         this.metaData = metaData;
+    }
+
+    @Override
+    public String toString() {
+        return JacksonUtil.toJSON(this);
     }
 }

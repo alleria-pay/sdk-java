@@ -1,5 +1,6 @@
 package com.alleria.pay;
 
+import com.alleria.util.JacksonUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,14 +29,14 @@ public class PayRequest {
 
     private long amount;
 
-    private String clientIp;
-
     // 商户自定义数据
     private Map<String, String> metaData;
 
     // 支付通道额外数据
-    private ChannelExtra extra;
+    private ChannelExtra extra = new ChannelExtra();
 
+    // 客户信息数据
+    private ClientInfo clientInfo;
 
     public long getMerchantId() {
         return merchantId;
@@ -85,14 +86,6 @@ public class PayRequest {
         this.amount = amount;
     }
 
-    public String getClientIp() {
-        return clientIp;
-    }
-
-    public void setClientIp(String clientIp) {
-        this.clientIp = clientIp;
-    }
-
     public Map<String, String> getMetaData() {
         return metaData;
     }
@@ -107,6 +100,14 @@ public class PayRequest {
 
     public void setExtra(ChannelExtra extra) {
         this.extra = extra;
+    }
+
+    public ClientInfo getClientInfo() {
+        return clientInfo;
+    }
+
+    public void setClientInfo(ClientInfo clientInfo) {
+        this.clientInfo = clientInfo;
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -183,14 +184,45 @@ public class PayRequest {
 
         @Override
         public String toString() {
-            return "Extra{" +
-                    "name='" + name + '\'' +
-                    ", phone='" + phone + '\'' +
-                    ", idCard='" + idCard + '\'' +
-                    ", bankCard='" + bankCard + '\'' +
-                    ", expirationDate='" + expirationDate + '\'' +
-                    ", cvn2='" + cvn2 + '\'' +
-                    '}';
+            return JacksonUtil.toJSON(this);
+        }
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class ClientInfo {
+
+        private String userId;
+
+        private String clientIp;
+
+        public ClientInfo() {
+        }
+
+
+        public ClientInfo(String userId, String clientIp) {
+            this.userId = userId;
+            this.clientIp = clientIp;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        public String getClientIp() {
+            return clientIp;
+        }
+
+        public void setClientIp(String clientIp) {
+            this.clientIp = clientIp;
+        }
+
+        @Override
+        public String toString() {
+            return JacksonUtil.toJSON(this);
         }
     }
 

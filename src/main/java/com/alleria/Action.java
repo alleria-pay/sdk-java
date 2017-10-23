@@ -91,6 +91,14 @@ public abstract class Action {
     }
 
     protected <T extends AppResult> T decrypt(AppResponse response, Class<T> tClass) {
+        T t = decryptBasic(response, tClass);
+        if (!t.isSuccess()) {
+            throw new RuntimeException(t.getMessage());
+        }
+        return t;
+    }
+
+    protected <T> T decryptBasic(AppResponse response, Class<T> tClass) {
         if (StringUtils.isEmpty(response.getSignature())) {
             throw new RuntimeException(response.getMessage());
         }
@@ -111,9 +119,6 @@ public abstract class Action {
         T t = JacksonUtil.toObject(data, tClass);
         if (t == null) {
             throw new RuntimeException("处理错误");
-        }
-        if (!t.isSuccess()) {
-            throw new RuntimeException(t.getMessage());
         }
         return t;
     }

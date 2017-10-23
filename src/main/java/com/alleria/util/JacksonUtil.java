@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Created on 2014/9/18.
@@ -32,6 +33,15 @@ public abstract class JacksonUtil {
         try {
             return mapper.readValue(json, clazz);
         } catch (IOException e) {
+            LOGGER.error("An unexpected error occurred.", e);
+            return null;
+        }
+    }
+
+    public static <T> T toObject(Map<String, Object> data, Class<T> clz) {
+        try {
+            return mapper.convertValue(data, clz);
+        } catch (IllegalArgumentException e) {
             LOGGER.error("An unexpected error occurred.", e);
             return null;
         }
